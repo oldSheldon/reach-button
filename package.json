@@ -1,0 +1,20 @@
+{
+  "name": "reach-button",
+  "version": "0.1.0",
+  "description": "A button that turns into your logo and reaches for the cursor. No dependencies.",
+  "type": "module",
+  "main": "./src/reach-button.js",
+  "types": "./src/reach-button.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/reach-button.d.ts",
+      "default": "./src/reach-button.js"
+    },
+    "./auto": "./src/auto.js"
+  },
+  "files": ["src"],
+  "sideEffects": ["./src/auto.js"],
+  "keywords": ["button", "cursor", "hover", "animation", "canvas", "cta", "interactive"],
+  "repository": { "type": "git", "url": "git+https://github.com/oldSheldon/reach-button.git" },
+  "license": "MIT"
+}

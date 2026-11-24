@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reach Button</title>
+<meta name="description" content="A button that turns into your logo and reaches for the cursor. Free and customisable.">
+<style>
+  :root { --bg: #fbfaf7; --fg: #17152e; --muted: #5b5870; --line: #dedbe6; --card: #fff; --btn: #17152e; --btn-fg: #fff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 48px 20px 80px; }
+  h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); line-height: 1; letter-spacing: -0.04em; margin: 0; max-width: 12ch; }
+  .lede { color: var(--muted); max-width: 54ch; font-size: 1.1rem; margin: 18px 0 0; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; margin-top: 40px; align-items: start; }
+  .stage { min-height: 520px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); display: grid; place-items: center; transition: background 200ms; }
+  .stage.dark { background: #101018; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; font: inherit; font-weight: 650; border: 0; border-radius: 12px; background: var(--btn); color: var(--btn-fg); text-decoration: none; cursor: pointer; }
+  form { display: grid; gap: 14px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); padding: 20px; }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
+  legend { font-weight: 650; padding: 0; margin-bottom: 8px; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chips label { border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; cursor: pointer; font-size: .92rem; }
+  .chips input { position: absolute; opacity: 0; }
+  .chips label:has(:checked) { background: var(--fg); color: #fff; border-color: var(--fg); }
+  .chips label:has(:focus-visible) { outline: 2px solid #3440ff; outline-offset: 2px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: .94rem; }
+  .row input[type=range] { width: 150px; }
+  .row input[type=color] { width: 44px; height: 28px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: none; }
+  .row input[type=text] { width: 170px; padding: 6px 9px; border: 1px solid var(--line); border-radius: 8px; font: inherit; }
+  pre { background: #17152e; color: #f2f0ff; padding: 18px; border-radius: 14px; overflow: auto; font-size: .86rem; line-height: 1.5; margin: 24px 0 0; }
+  .copy { margin-top: 12px; padding: 9px 16px; font: inherit; border: 1px solid var(--line); border-radius: 10px; background: var(--card); cursor: pointer; }
+  footer { margin-top: 48px; color: var(--muted); font-size: .92rem; }
+  @media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } .stage { min-height: 420px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>A button that reaches back</h1>
+  <p class="lede">Move towards it. It turns into your logo and puts a hand out. Land on it and it's a normal button again, with a thumbs-up.</p>
+  <div class="grid">
+    <div class="stage" id="stage"><a class="cta" id="cta" href="#code">Let's work together →</a></div>
+    <form id="form" onsubmit="return false">
+      <fieldset><legend>Look</legend>
+        <div class="chips">
+          <label><input type="radio" name="preset" value="paper" checked>Paper</label>
+          <label><input type="radio" name="preset" value="goo">Goo</label>
+          <label><input type="radio" name="preset" value="robot">Robot</label>
+        </div>
+      </fieldset>
+      <label class="row">Arm <select name="arm"><option>squiggle</option><option>goo</option><option>spring</option></select></label>
+      <label class="row">Hand <select name="hand"><option>paper</option><option>claw</option><option>robot</option></select></label>
+      <label class="row">Arm colour <input type="color" name="armColor"></label>
+      <label class="row">Hand colour <input type="color" name="handColor"></label>
+      <label class="row">Outline <input type="color" name="inkColor"></label>
+      <label class="row">Cuff <input type="color" name="cuffColor"></label>
+      <label class="row">Button colour <input type="color" name="button" value="#17152e"></label>
+      <label class="row">Reach <input type="range" name="reach" min="80" max="280" value="168"></label>
+      <label class="row">Hand size <input type="range" name="handSize" min="0.7" max="2" step="0.02" value="1.18"></label>
+      <label class="row">Thickness <input type="range" name="thickness" min="0.5" max="2" step="0.05" value="1"></label>
+      <label class="row">Label <input type="text" name="label" value="Let's work together →"></label>
+      <label class="row">Your logo <input type="file" name="logo" accept="image/*" style="width:180px"></label>
+      <label class="row">Dark stage <input type="checkbox" name="dark"></label>
+    </form>
+  </div>
+  <pre id="code"><code></code></pre>
+  <button class="copy" id="copy" type="button">Copy code</button>
+  <footer>Free to use under the MIT licence. <a href="https://github.com/oldSheldon/reach-button">Source on GitHub</a>.</footer>
+</main>
+<script type="module">
+  import { presets, reach } from "./src/reach-button.js";
+  const form = document.getElementById("form");
+  const cta = document.getElementById("cta");
+  const code = document.querySelector("#code code");
+  const f = (n) => form.elements[n];
+  let logo;
+  const handle = reach(cta, { preset: "paper" });
+
+  function fill(name) {
+    for (const k of ["arm", "hand", "armColor", "handColor", "inkColor", "cuffColor"]) f(k).value = presets[name][k];
+  }
+  function read() {
+    const o = { preset: f("preset").value };
+    for (const k of ["arm", "hand", "armColor", "handColor", "inkColor", "cuffColor"]) o[k] = f(k).value;
+    for (const k of ["reach", "handSize", "thickness"]) o[k] = Number(f(k).value);
+    if (logo) o.logo = logo;
+    return o;
+  }
+  function show() {
+    const o = read();
+    cta.style.setProperty("--btn", f("button").value);
+    cta.firstChild.nodeValue = f("label").value || "Button";
+    document.getElementById("stage").classList.toggle("dark", f("dark").checked);
+    handle.update(o);
+    const base = { arm: "", hand: "", armColor: "", handColor: "", inkColor: "", cuffColor: "", ...presets[o.preset], reach: 168, handSize: 1.18, thickness: 1 };
+    const lines = [`  preset: "${o.preset}",`];
+    for (const [k, v] of Object.entries(o)) if (k !== "preset" && k !== "logo" && base[k] !== v) lines.push(`  ${k}: ${JSON.stringify(v)},`);
+    lines.push('  logo: "/your-logo.svg",');
+    code.textContent = `<a class="cta" href="/contact">${f("label").value}</a>\n\n<script type="module">\n  import { reach } from "https://cdn.jsdelivr.net/gh/oldSheldon/reach-button@0.1.0/src/reach-button.js";\n  reach(".cta", {\n  ${lines.join("\n  ")}\n  });\n</` + `script>`;
+  }
+  form.addEventListener("input", (e) => {
+    if (e.target.name === "preset") fill(e.target.value);
+    if (e.target.name === "logo") {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (logo) URL.revokeObjectURL(logo);
+      logo = URL.createObjectURL(file);
+    }
+    show();
+  });
+  document.getElementById("copy").addEventListener("click", async (e) => {
+    try { await navigator.clipboard.writeText(code.textContent); e.target.textContent = "Copied"; }
+    catch { getSelection().selectAllChildren(code); e.target.textContent = "Press Ctrl+C"; }
+    setTimeout(() => (e.target.textContent = "Copy code"), 1600);
+  });
+  fill("paper");
+  show();
+</script>
+</body>
+</html>
